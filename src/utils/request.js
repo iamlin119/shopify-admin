@@ -51,6 +51,10 @@ const errorHandler = error => {
 const request = extend({
   errorHandler,
   // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
+  credentials: 'include', // 默认请求是否带上cookie,
+  headers: {
+    // 'Authorization': 'Basic OTlkZjE2ZjViNWI1MTkyZWVlNWQ2ZDUwY2NhMzBmZjM6YWI5ZGMwY2RmNTBjNjlkN2E3MjM5MmNhMzJjODFkMzc='
+    'X-Shopify-Access-Token': 'ab9dc0cdf50c69d7a72392ca32c81d37'
+  }
 });
 export default request;

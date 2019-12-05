@@ -71,9 +71,10 @@ export default {
   targets: {
     ie: 11,
   },
-  devServer: {
-    proxy: {
-      '/api': 'https://webtrain.myshopify.com/admin/api/2019-10'
+  proxy: {
+    '/admin/api/2019-10': {
+      target: 'https://webtrain.myshopify.com/',
+      changeOrigin: true,
     }
   },
   // umi routes: https://umijs.org/zh/guide/router.html

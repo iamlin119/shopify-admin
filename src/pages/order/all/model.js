@@ -1,4 +1,6 @@
 import { addRule, queryRule, removeRule, updateRule } from './service';
+import { query, add, update, del } from '@/services/rest';
+import { queryOrders } from '@/services/api';
 
 const Model = {
   namespace: 'order',
@@ -10,7 +12,7 @@ const Model = {
   },
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryRule, payload);
+      const response = yield call(queryOrders, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -18,7 +20,7 @@ const Model = {
     },
 
     *add({ payload, callback }, { call, put }) {
-      const response = yield call(addRule, payload);
+      const response = yield call(add, 'orders', payload);
       yield put({
         type: 'save',
         payload: response,
@@ -27,7 +29,7 @@ const Model = {
     },
 
     *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeRule, payload);
+      const response = yield call(remove, 'orders', payload);
       yield put({
         type: 'save',
         payload: response,
@@ -36,7 +38,7 @@ const Model = {
     },
 
     *update({ payload, callback }, { call, put }) {
-      const response = yield call(updateRule, payload);
+      const response = yield call(update, 'orders', payload);
       yield put({
         type: 'save',
         payload: response,

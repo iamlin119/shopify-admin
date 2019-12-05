@@ -115,7 +115,7 @@ class TableList extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'listAndtableList/fetch',
+      type: 'order/fetch',
     });
   }
 
@@ -139,7 +139,7 @@ class TableList extends Component {
     }
 
     dispatch({
-      type: 'listAndtableList/fetch',
+      type: 'order/fetch',
       payload: params,
     });
   };
