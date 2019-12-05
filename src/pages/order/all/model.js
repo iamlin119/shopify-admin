@@ -1,7 +1,7 @@
 import { addRule, queryRule, removeRule, updateRule } from './service';
 
 const Model = {
-  namespace: 'listAndtableList',
+  namespace: 'order',
   state: {
     data: {
       list: [],

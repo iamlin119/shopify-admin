@@ -71,6 +71,11 @@ export default {
   targets: {
     ie: 11,
   },
+  devServer: {
+    proxy: {
+      '/api': 'https://webtrain.myshopify.com/admin/api/2019-10'
+    }
+  },
   // umi routes: https://umijs.org/zh/guide/router.html
   routes: [
     {
@@ -161,6 +166,25 @@ export default {
                   icon: 'smile',
                   path: '/form/advanced-form',
                   component: './form/advanced-form',
+                },
+              ],
+            },
+            {
+              path: '/order',
+              icon: 'table',
+              name: 'order',
+              routes: [
+                {
+                  name: 'all',
+                  icon: 'smile',
+                  path: '/order/table-list',
+                  component: './order/all',
+                },
+                {
+                  name: 'abandoned',
+                  icon: 'smile',
+                  path: '/order/basic-list',
+                  component: './order/basic-list'
                 },
               ],
             },
