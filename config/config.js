@@ -79,6 +79,7 @@ export default {
       changeOrigin: true,
     }
   },
+  history: 'hash',
   // umi routes: https://umijs.org/zh/guide/router.html
   routes: [
     {
@@ -120,7 +121,7 @@ export default {
           path: '/',
           component: '../layouts/BasicLayout',
           Routes: ['src/pages/Authorized'],
-          authority: ['admin', 'user'],
+          // authority: ['admin', 'user'],
           routes: [
             {
               path: '/dashboard',
