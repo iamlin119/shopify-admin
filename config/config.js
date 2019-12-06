@@ -71,7 +71,7 @@ export default {
   targets: {
     ie: 11,
   },
-  base: '/shopify-admin/',
+  // base: '/shopify-admin/',
   publicPath: '/shopify-admin/',
   proxy: {
     '/admin/api/2019-10': {
@@ -356,7 +356,7 @@ export default {
             {
               path: '/',
               redirect: '/dashboard/analysis',
-              authority: ['admin', 'user'],
+              // authority: ['admin', 'user'],
             },
             {
               component: '404',

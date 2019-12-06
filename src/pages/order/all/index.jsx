@@ -55,6 +55,7 @@ class Order extends Component {
     {
       title: 'Order',
       dataIndex: 'order_number',
+      render: (val) => `#${val}`
     },
     {
       title: 'Date',
