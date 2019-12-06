@@ -19,6 +19,7 @@ import React, { Component, Fragment } from 'react';
 import { PageHeaderWrapper } from '@ant-design/pro-layout';
 import { connect } from 'dva';
 import moment from 'moment';
+import currencyFormatter from 'currency-formatter';
 import CreateForm from './components/CreateForm';
 import StandardTable from './components/StandardTable';
 import UpdateForm from './components/UpdateForm';
@@ -33,14 +34,14 @@ const getValue = obj =>
     .join(',');
 
 const statusMap = ['default', 'processing', 'success', 'error'];
-const status = ['关闭', '运行中', '已上线', '异常'];
+const status = ['Authorized', 'Paid', '已上线', '异常'];
 
 /* eslint react/no-multi-comp:0 */
-@connect(({ listAndtableList, loading }) => ({
-  listAndtableList,
-  loading: loading.models.listAndtableList,
+@connect(({ order, loading }) => ({
+  order,
+  loading: loading.models.order,
 }))
-class TableList extends Component {
+class Order extends Component {
   state = {
     modalVisible: false,
     updateModalVisible: false,
@@ -52,64 +53,67 @@ class TableList extends Component {
 
   columns = [
     {
-      title: '规则名称',
-      dataIndex: 'name',
+      title: 'Order',
+      dataIndex: 'order_number',
     },
     {
-      title: '描述',
-      dataIndex: 'desc',
-    },
-    {
-      title: '服务调用次数',
-      dataIndex: 'callNo',
-      sorter: true,
-      align: 'right',
-      render: val => `${val} 万`,
-      // mark to display a total number
-      needTotal: true,
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      filters: [
-        {
-          text: status[0],
-          value: '0',
-        },
-        {
-          text: status[1],
-          value: '1',
-        },
-        {
-          text: status[2],
-          value: '2',
-        },
-        {
-          text: status[3],
-          value: '3',
-        },
-      ],
-
-      render(val) {
-        return <Badge status={statusMap[val]} text={status[val]} />;
-      },
-    },
-    {
-      title: '上次调度时间',
-      dataIndex: 'updatedAt',
-      sorter: true,
+      title: 'Date',
+      dataIndex: 'created_at',
       render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
     },
     {
-      title: '操作',
-      render: (text, record) => (
-        <Fragment>
-          <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
-          <Divider type="vertical" />
-          <a href="">订阅警报</a>
-        </Fragment>
-      ),
+      title: 'Customer',
+      dataIndex: 'customer.first_name',
+      render: (val, record) => `${val} ${record.customer.last_name}`,
     },
+    {
+      title: 'Payment',
+      dataIndex: 'financial_status',
+      // filters: [
+      //   {
+      //     text: status[0],
+      //     value: '0',
+      //   },
+      //   {
+      //     text: status[1],
+      //     value: '1',
+      //   },
+      //   {
+      //     text: status[2],
+      //     value: '2',
+      //   },
+      //   {
+      //     text: status[3],
+      //     value: '3',
+      //   },
+      // ],
+
+      // render(val) {
+      //   return <Badge status={statusMap[val]} text={status[val]} />;
+      // },
+    },
+    {
+      title: 'Fulfillment',
+      dataIndex: 'fulfillment_status',
+      sorter: true,
+      render: (val) => val ? val : 'Unfulfilled'
+    },
+    {
+      title: 'Total',
+      dataIndex: 'total_price',
+      sorter: true,
+      render: (val, record) => currencyFormatter.format(val, {code: record.currency})
+    },
+    // {
+    //   title: '操作',
+    //   render: (text, record) => (
+    //     <Fragment>
+    //       <a onClick={() => this.handleUpdateModalVisible(true, record)}>配置</a>
+    //       <Divider type="vertical" />
+    //       <a href="">订阅警报</a>
+    //     </Fragment>
+    //   ),
+    // },
   ];
 
   componentDidMount() {
@@ -450,7 +454,7 @@ class TableList extends Component {
 
   render() {
     const {
-      listAndtableList: { data },
+      order: { data },
       loading,
     } = this.props;
     const { selectedRows, modalVisible, updateModalVisible, stepFormValues } = this.state;
@@ -495,6 +499,7 @@ class TableList extends Component {
               columns={this.columns}
               onSelectRow={this.handleSelectRows}
               onChange={this.handleStandardTableChange}
+              rowKey="id"
             />
           </div>
         </Card>
@@ -511,4 +516,4 @@ class TableList extends Component {
   }
 }
 
-export default Form.create()(TableList);
+export default Form.create()(Order);

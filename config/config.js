@@ -71,6 +71,8 @@ export default {
   targets: {
     ie: 11,
   },
+  base: '/shopify-admin/',
+  publicPath: '/shopify-admin/',
   proxy: {
     '/admin/api/2019-10': {
       target: 'https://webtrain.myshopify.com/',
