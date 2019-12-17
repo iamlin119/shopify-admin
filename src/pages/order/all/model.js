@@ -8,16 +8,19 @@ const Model = {
     data: {
       list: [],
       pagination: {},
+      link: {},
     }
   },
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryOrders, payload);
+      const response = yield call(queryOrders, {...payload, limit:1});
+      console.log('response', response)
       yield put({
         type: 'save',
         payload: {
-          list: response.orders,
-          pagination: {}
+          list: response.data.orders,
+          pagination: {},
+          link: response.headers['link']
         },
       });
     },
