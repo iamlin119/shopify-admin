@@ -87,31 +87,29 @@ const footerRender = () => {
   );
 };
 
-const BasicLayout = props => {
-  const {
-    dispatch,
-    children,
-    settings,
-    location = {
-      pathname: '/',
-    },
-  } = props;
-  /**
-   * constructor
-   */
+class BasicLayout extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hasError: false
+    };
+  }
 
-  useEffect(() => {
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidMount() {
+    const { dispatch } = this.props;
     if (dispatch) {
       dispatch({
         type: 'user/fetchCurrent',
       });
     }
-  }, []);
-  /**
-   * init variables
-   */
+  }
 
-  const handleMenuCollapse = payload => {
+  handleMenuCollapse = payload => {
+    const { dispatch } = this.props;
     if (dispatch) {
       dispatch({
         type: 'global/changeLayoutCollapsed',
@@ -120,11 +118,23 @@ const BasicLayout = props => {
     }
   }; // get children authority
 
-  const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
-    authority: undefined,
-  };
-  return (
-    <>
+  render () {
+    const {
+      dispatch,
+      children,
+      settings,
+      location = {
+        pathname: '/',
+      },
+    } = this.props;
+    const props = this.props;
+		const { hasError } = this.state;
+
+    const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
+      authority: undefined,
+    };
+
+    return (<>
       <ProLayout
         logo={logo}
         menuHeaderRender={(logoDom, titleDom) => (
@@ -133,7 +143,7 @@ const BasicLayout = props => {
             {titleDom}
           </Link>
         )}
-        onCollapse={handleMenuCollapse}
+        onCollapse={this.handleMenuCollapse}
         menuItemRender={(menuItemProps, defaultDom) => {
           if (menuItemProps.isUrl || menuItemProps.children) {
             return defaultDom;
@@ -159,7 +169,6 @@ const BasicLayout = props => {
             <span>{route.breadcrumbName}</span>
           );
         }}
-        footerRender={footerRender}
         menuDataRender={menuDataRender}
         formatMessage={formatMessage}
         rightContentRender={rightProps => <RightContent {...rightProps} />}
@@ -167,7 +176,7 @@ const BasicLayout = props => {
         {...settings}
       >
         <Authorized authority={authorized.authority} noMatch={noMatch}>
-          {children}
+					 {hasError ? <Result status="error" title="程序发生错误，请反馈给服务提供商" /> : children}
         </Authorized>
       </ProLayout>
       <SettingDrawer
@@ -180,7 +189,8 @@ const BasicLayout = props => {
         }
       />
     </>
-  );
+    );
+  }
 };
 
 export default connect(({ global, settings }) => ({
